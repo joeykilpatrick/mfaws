@@ -1,0 +1,46 @@
+{
+  "name": "mfaws",
+  "version": "0.0.0",
+  "description": "A cli tool to manage multi-factor IAM User authentication for the AWS CLI.",
+  "main": "src/index.js",
+  "bin": {
+    "mfaws": "bin/mfaws"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "Joey Kilpatrick",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.0.0",
+    "child-process-promise": "^2.2.1",
+    "meow": "^6.1.1",
+    "prompts": "^2.3.2"
+  },
+  "devDependencies": {
+    "@types/child-process-promise": "^2.2.1",
+    "@types/node": "^13.13.4",
+    "@types/prompts": "^2.0.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joeykilpatrick/mfaws.git"
+  },
+  "keywords": [
+    "aws",
+    "cli",
+    "mfa",
+    "multi",
+    "factor",
+    "iam",
+    "cdk",
+    "sam",
+    "otp",
+    "credential",
+    "credentials"
+  ],
+  "bugs": {
+    "url": "https://github.com/joeykilpatrick/mfaws/issues"
+  },
+  "homepage": "https://github.com/joeykilpatrick/mfaws#readme"
+}

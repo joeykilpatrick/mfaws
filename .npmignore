@@ -1,0 +1,8 @@
+# WebStorm files
+.idea
+
+# Source
+src/**/*
+
+# Typescript Files
+tsconfig.json

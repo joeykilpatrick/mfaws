@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "module": "commonjs",
+    "strict": true
+  },
+  "exclude": ["node_modules"]
+}
