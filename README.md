@@ -1,4 +1,4 @@
-# mfaws
+# mfaws [![npm](https://img.shields.io/npm/v/mfaws)](https://www.npmjs.com/package/mfaws)
 
 Easy MFA access for AWS IAM Users for the AWS CLI.
 
