@@ -1,0 +1,47 @@
+{
+  "extends": "tslint:recommended",
+  "rules": {
+    "arrow-parens": false,
+    "deprecation": {
+      "severity": "warn"
+    },
+    "interface-name": true,
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          "static-field",
+          "instance-field",
+          "static-method",
+          "instance-method"
+        ]
+      }
+    ],
+    "no-consecutive-blank-lines": true,
+    "no-console": [
+      true,
+      "debug",
+      "info",
+      "time",
+      "timeEnd",
+      "trace"
+    ],
+    "no-inferrable-types": false,
+    "no-non-null-assertion": true,
+    "no-var-requires": true,
+    "no-unused-expression": true,
+    "object-literal-key-quotes": [
+      true,
+      "consistent-as-needed"
+    ],
+    "object-literal-sort-keys": true,
+    "ordered-imports": true,
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "trailing-comma": [true, {
+      "multiline": "always"
+    }]
+  }
+}

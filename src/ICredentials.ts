@@ -2,7 +2,7 @@ export interface ICredentials {
     AccessKeyId: string,
     SecretAccessKey: string,
     SessionToken: string,
-    Expiration: string
+    Expiration: string,
 }
 
 export interface IJSONCredentials {
