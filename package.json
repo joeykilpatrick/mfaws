@@ -19,8 +19,8 @@
   },
   "devDependencies": {
     "@types/child-process-promise": "^2.2.1",
-    "@types/node": "^13.13.4",
-    "@types/prompts": "^2.0.7",
+    "@types/node": "^13.13.5",
+    "@types/prompts": "^2.0.8",
     "tslint": "^6.1.2",
     "typescript": "^3.8.3"
   },
