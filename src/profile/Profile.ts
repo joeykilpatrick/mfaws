@@ -58,10 +58,10 @@ export class Profile {
                 await configureSet(VariableName.LONG_TERM_SECRET_ACCESS_KEY, '" "', this.getProfileFlag());
                 this.accessKeyId = this.longTermAccessKeyId;
                 this.secretAccessKey = this.longTermSecretAccessKey;
-                this.sessionToken = '" "';
-                this.expiration = '" "';
-                this.longTermAccessKeyId = '" "';
-                this.longTermSecretAccessKey = '" "';
+                this.sessionToken = ' ';
+                this.expiration = ' ';
+                this.longTermAccessKeyId = ' ';
+                this.longTermSecretAccessKey = ' ';
             } else {
                 console.log('No long-term credentials found to restore.');
             }
