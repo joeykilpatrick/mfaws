@@ -83,18 +83,18 @@ export class Profile {
 
             const credentials: ISessionCredentials = await getSessionToken(tokenCode, this.mfaSerial, this.getProfileFlag(), durationFlagString);
 
+            await configureSet(VariableName.LONG_TERM_ACCESS_KEY_ID, this.accessKeyId, this.getProfileFlag());
+            await configureSet(VariableName.LONG_TERM_SECRET_ACCESS_KEY, this.secretAccessKey, this.getProfileFlag());
             await configureSet(VariableName.ACCESS_KEY_ID, credentials.AccessKeyId, this.getProfileFlag());
             await configureSet(VariableName.SECRET_ACCESS_KEY, credentials.SecretAccessKey, this.getProfileFlag());
             await configureSet(VariableName.SESSION_TOKEN, credentials.SessionToken, this.getProfileFlag());
             await configureSet(VariableName.EXPIRATION, credentials.Expiration, this.getProfileFlag());
-            await configureSet(VariableName.LONG_TERM_ACCESS_KEY_ID, this.accessKeyId, this.getProfileFlag());
-            await configureSet(VariableName.LONG_TERM_SECRET_ACCESS_KEY, this.secretAccessKey, this.getProfileFlag());
+            this.longTermAccessKeyId = this.accessKeyId;
+            this.longTermSecretAccessKey = this.secretAccessKey;
             this.accessKeyId = credentials.AccessKeyId;
             this.secretAccessKey = credentials.SecretAccessKey;
             this.sessionToken = credentials.SessionToken;
             this.expiration = credentials.Expiration;
-            this.longTermAccessKeyId = this.accessKeyId;
-            this.longTermSecretAccessKey = this.secretAccessKey;
             console.log();
             console.log('Expiration: ' + new Date(credentials.Expiration).toLocaleString());
             console.log();
