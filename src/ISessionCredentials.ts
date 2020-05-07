@@ -1,10 +1,6 @@
-export interface ICredentials {
+export interface ISessionCredentials {
     AccessKeyId: string,
     SecretAccessKey: string,
     SessionToken: string,
     Expiration: string,
-}
-
-export interface IJSONCredentials {
-    Credentials: ICredentials
 }
