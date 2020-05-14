@@ -7,8 +7,6 @@ Works with any AWS tool that reads from ~/.aws/credentials (e.g. SDKs, CDK, SAM,
 ### Install
 Install with NPM: `npm i -g mfaws`
 
-You also must have the **AWS CLI** installed.
-
 ### Usage
 Each example below assumes that you have run `aws configure` and have set an access key id and secret access key. 
 
