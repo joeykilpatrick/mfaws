@@ -1,7 +1,8 @@
 import * as chalk from 'chalk';
 import * as meow from 'meow';
+import * as os from 'os';
 
-import {getProfileVariables} from './config-files';
+import {getProfileVariables, writeProfile} from './config-files';
 import {Profile} from './profile';
 import {promptForMFASerial, promptForTokenCode} from './prompts';
 
@@ -48,20 +49,25 @@ export = async () => {
         return;
     }
 
+    const credentialsFilePath: string = `${os.homedir()}/.aws/credentials`; // TODO Check if env var overwrites this
+    const configFilePath: string = `${os.homedir()}/.aws/config`; // TODO Check if env var overwrites this
+
     const profileName = cli.flags.profile || 'default';
 
     const profile: Profile = new Profile(profileName, getProfileVariables(
-        'C://Users/z0041r7e/.aws/credentials',
-        'C://Users/z0041r7e/.aws/config',
+        credentialsFilePath,
+        configFilePath,
     ));
 
     const command = cli.input[0];
     switch (command) {
         case 'set':
             await set(profile);
+            writeProfile(profile, credentialsFilePath, configFilePath);
             break;
         case 'restore':
             await profile.restoreLongTermCredentials();
+            writeProfile(profile, credentialsFilePath, configFilePath);
             break;
         default:
             console.log(`Unknown command: ${command}`);

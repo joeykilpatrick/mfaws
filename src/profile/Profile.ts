@@ -1,18 +1,18 @@
 import * as chalk from 'chalk';
-import {configureSet, getSessionToken} from '../aws-cli';
+import {getSessionToken} from '../aws-cli';
 import {ISessionCredentials} from '../ISessionCredentials';
 import {IProfileVariables} from './IProfileVariables';
 import {VariableName} from './VariableName';
 
 export class Profile {
-    private readonly profileName: string;
-    private accessKeyId: string = ' ';
-    private secretAccessKey: string = ' ';
-    private sessionToken: string = ' ';
-    private expiration: string = ' ';
-    private longTermAccessKeyId: string = ' ';
-    private longTermSecretAccessKey: string = ' ';
+    public accessKeyId: string = ' ';
+    public secretAccessKey: string = ' ';
+    public sessionToken: string = ' ';
+    public expiration: string = ' ';
+    public longTermAccessKeyId: string = ' ';
+    public longTermSecretAccessKey: string = ' ';
     public mfaSerial: string = ' ';
+    public readonly profileName: string;
 
     constructor(profileName: string, profileVariables: IProfileVariables) {
         this.profileName = profileName;
@@ -50,12 +50,6 @@ export class Profile {
     public async restoreLongTermCredentials(): Promise<void> {
         try {
             if (this.longTermCredentialsSet()) {
-                await configureSet(VariableName.ACCESS_KEY_ID, this.longTermAccessKeyId, this.getProfileFlag());
-                await configureSet(VariableName.SECRET_ACCESS_KEY, this.longTermSecretAccessKey, this.getProfileFlag());
-                await configureSet(VariableName.SESSION_TOKEN, '" "', this.getProfileFlag());
-                await configureSet(VariableName.EXPIRATION, '" "', this.getProfileFlag());
-                await configureSet(VariableName.LONG_TERM_ACCESS_KEY_ID, '" "', this.getProfileFlag());
-                await configureSet(VariableName.LONG_TERM_SECRET_ACCESS_KEY, '" "', this.getProfileFlag());
                 this.accessKeyId = this.longTermAccessKeyId;
                 this.secretAccessKey = this.longTermSecretAccessKey;
                 this.sessionToken = ' ';
@@ -83,12 +77,6 @@ export class Profile {
 
             const credentials: ISessionCredentials = await getSessionToken(tokenCode, this.mfaSerial, this.getProfileFlag(), durationFlagString);
 
-            await configureSet(VariableName.LONG_TERM_ACCESS_KEY_ID, this.accessKeyId, this.getProfileFlag());
-            await configureSet(VariableName.LONG_TERM_SECRET_ACCESS_KEY, this.secretAccessKey, this.getProfileFlag());
-            await configureSet(VariableName.ACCESS_KEY_ID, credentials.AccessKeyId, this.getProfileFlag());
-            await configureSet(VariableName.SECRET_ACCESS_KEY, credentials.SecretAccessKey, this.getProfileFlag());
-            await configureSet(VariableName.SESSION_TOKEN, credentials.SessionToken, this.getProfileFlag());
-            await configureSet(VariableName.EXPIRATION, credentials.Expiration, this.getProfileFlag());
             this.longTermAccessKeyId = this.accessKeyId;
             this.longTermSecretAccessKey = this.secretAccessKey;
             this.accessKeyId = credentials.AccessKeyId;
@@ -105,7 +93,6 @@ export class Profile {
     }
 
     async setMfaSerial(mfaSerial: string) {
-        await configureSet(VariableName.MFA_SERIAL, mfaSerial, this.getProfileFlag());
         this.mfaSerial = mfaSerial;
     }
 
