@@ -2,9 +2,8 @@ import * as chalk from 'chalk';
 import * as meow from 'meow';
 import * as os from 'os';
 
-import {getProfileVariables, writeProfile} from './config-files';
 import {Profile} from './profile';
-import {promptForMFASerial, promptForTokenCode} from './prompts';
+import {promptForTokenCode} from './prompts';
 
 const cli = meow(`
     Usage
@@ -54,20 +53,15 @@ export = async () => {
 
     const profileName = cli.flags.profile || 'default';
 
-    const profile: Profile = new Profile(profileName, getProfileVariables(
-        credentialsFilePath,
-        configFilePath,
-    ));
+    const profile: Profile = new Profile(profileName, credentialsFilePath, configFilePath);
 
     const command = cli.input[0];
     switch (command) {
         case 'set':
             await set(profile);
-            writeProfile(profile, credentialsFilePath, configFilePath);
             break;
         case 'restore':
             await profile.restoreLongTermCredentials();
-            writeProfile(profile, credentialsFilePath, configFilePath);
             break;
         default:
             console.log(`Unknown command: ${command}`);
@@ -79,13 +73,6 @@ async function set(profile: Profile) {
     if (cli.input.length > 2) {
         cli.showHelp(2);
         return;
-    }
-
-    // Get MFA Device
-    let mfaSerial: string = profile.mfaSerial;
-    if (!mfaSerial) {
-        mfaSerial = await promptForMFASerial();
-        await profile.setMfaSerial(mfaSerial);
     }
 
     // Get OTP Code

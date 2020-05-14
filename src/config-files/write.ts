@@ -10,15 +10,15 @@
 
 import {readFileSync, writeFileSync} from 'fs';
 
-import {Profile, VariableName} from '../profile';
+import {Profile, ProfileVariable, VariableName} from '../profile';
 
 export function writeProfile(profile: Profile, credentialsFileName: string, configFileName: string): void {
-    const credentialsValues: {[key: string]: string} = {
+    const credentialsValues: {[key: string]: ProfileVariable} = {
         [VariableName.ACCESS_KEY_ID]: profile.accessKeyId,
         [VariableName.SECRET_ACCESS_KEY]: profile.secretAccessKey,
         [VariableName.SESSION_TOKEN]: profile.sessionToken,
     };
-    const configValues: {[key: string]: string} = {
+    const configValues: {[key: string]: ProfileVariable} = {
         [VariableName.EXPIRATION]: profile.expiration,
         [VariableName.LONG_TERM_ACCESS_KEY_ID]: profile.longTermAccessKeyId,
         [VariableName.LONG_TERM_SECRET_ACCESS_KEY]: profile.longTermSecretAccessKey,
@@ -31,7 +31,7 @@ export function writeProfile(profile: Profile, credentialsFileName: string, conf
     writeIniFile(configFileName, configProfileName, configValues);
 }
 
-function writeIniFile(fileName: string, sectionName: string, values: {[key: string]: string}) {
+function writeIniFile(fileName: string, sectionName: string, values: {[key: string]: ProfileVariable}) {
     const fileString: string = readFileSync(fileName, 'utf-8');
 
     const lines: string[] = fileString.split(/\r?\n/);
@@ -47,10 +47,23 @@ function writeIniFile(fileName: string, sectionName: string, values: {[key: stri
         const thisSection: string | null = section ? section[1] : null;
         if (thisSection) { // If this line is a [section] line
             if (currentSection === sectionName) { // If this line is new [section] right after the one we're looking for
+                const spaceLines: string[] = []; // Take off any of the last lines that are just spaces
+                while (true) {
+                    const lastLine: string = newLines.pop() as string; // Assertion okay since newLines can't be empty
+                    if (/^\s*$/.test(lastLine)) {
+                        spaceLines.push(lastLine);
+                    } else {
+                        newLines.push(lastLine); // Put it back
+                        break;
+                    }
+                }
                 Object.entries(values).forEach(([key, value]) => { // Add the rest of the variables
-                    newLines.push(`${key} = ${value}` + (comment ? ` #${comment}` : ''));
+                    if (value) {
+                        newLines.push(`${key} = ${value}` + (comment ? ` #${comment}` : ''));
+                    }
                     delete values[key];
                 });
+                newLines.push(...spaceLines); // Put the 'just spaces' lines back
             }
             currentSection = thisSection;
             newLines.push(line);
@@ -61,8 +74,10 @@ function writeIniFile(fileName: string, sectionName: string, values: {[key: stri
                     newLines.push(line);
                 } else {
                     const key = tokens[1];
-                    if (values[key]) {
-                        newLines.push(`${key} = ${values[key]}` + (comment ? ` #${comment}` : ''));
+                    if (values[key] !== undefined) {
+                        if (values[key]) {
+                            newLines.push(`${key} = ${values[key]}` + (comment ? ` #${comment}` : ''));
+                        }
                         delete values[key];
                     } else {
                         newLines.push(line);

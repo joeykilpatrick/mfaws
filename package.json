@@ -13,13 +13,12 @@
   "author": "Joey Kilpatrick",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.677.0",
     "chalk": "^4.0.0",
-    "child-process-promise": "^2.2.1",
     "meow": "^6.1.1",
     "prompts": "^2.3.2"
   },
   "devDependencies": {
-    "@types/child-process-promise": "^2.2.1",
     "@types/node": "^13.13.5",
     "@types/prompts": "^2.0.8",
     "tslint": "^6.1.2",
@@ -29,7 +28,9 @@
     "type": "git",
     "url": "git+https://github.com/joeykilpatrick/mfaws.git"
   },
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "keywords": [
     "aws",
     "cli",
