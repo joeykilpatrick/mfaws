@@ -1,6 +1,6 @@
 {
   "name": "mfaws",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A cli tool to manage multi-factor IAM User authentication for the AWS CLI.",
   "main": "src/index.js",
   "bin": {

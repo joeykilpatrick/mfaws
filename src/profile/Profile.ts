@@ -25,7 +25,7 @@ export class Profile {
         this.configFilePath = configFilePath;
         this.profileName = profileName;
         const profileVariables: IProfileVariables = getProfileVariables(credentialsFilePath, configFilePath);
-        Object.entries(profileVariables[profileName]).forEach(([key, value]: [string, string]) => {
+        Object.entries(profileVariables[profileName] || []).forEach(([key, value]: [string, string]) => {
             switch (key) {
                 case VariableName.ACCESS_KEY_ID:
                     this.accessKeyId = value;
@@ -75,6 +75,11 @@ export class Profile {
         const alreadySet: boolean = !!this.sessionToken;
         if (alreadySet) {
             await this.restoreLongTermCredentials();
+        }
+
+        if (!this.accessKeyId || !this.secretAccessKey) {
+            console.log(`Did not find an access key id and secret access key for profile "${this.profileName}"`);
+            return;
         }
 
         if (!this.mfaSerial) {

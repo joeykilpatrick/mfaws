@@ -55,6 +55,11 @@ export = async () => {
 
     const profile: Profile = new Profile(profileName, credentialsFilePath, configFilePath);
 
+    if (!profile.accessKeyId || !profile.secretAccessKey) {
+        printError(`Did not find an access key id and secret access key for profile "${profile.profileName}"`);
+        return;
+    }
+
     const command = cli.input[0];
     switch (command) {
         case 'set':

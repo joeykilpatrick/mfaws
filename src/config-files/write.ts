@@ -47,23 +47,7 @@ function writeIniFile(fileName: string, sectionName: string, values: {[key: stri
         const thisSection: string | null = section ? section[1] : null;
         if (thisSection) { // If this line is a [section] line
             if (currentSection === sectionName) { // If this line is new [section] right after the one we're looking for
-                const spaceLines: string[] = []; // Take off any of the last lines that are just spaces
-                while (true) {
-                    const lastLine: string = newLines.pop() as string; // Assertion okay since newLines can't be empty
-                    if (/^\s*$/.test(lastLine)) {
-                        spaceLines.push(lastLine);
-                    } else {
-                        newLines.push(lastLine); // Put it back
-                        break;
-                    }
-                }
-                Object.entries(values).forEach(([key, value]) => { // Add the rest of the variables
-                    if (value) {
-                        newLines.push(`${key} = ${value}` + (comment ? ` #${comment}` : ''));
-                    }
-                    delete values[key];
-                });
-                newLines.push(...spaceLines); // Put the 'just spaces' lines back
+                addNewAssignmentLines(newLines, values);
             }
             currentSection = thisSection;
             newLines.push(line);
@@ -76,7 +60,7 @@ function writeIniFile(fileName: string, sectionName: string, values: {[key: stri
                     const key = tokens[1];
                     if (values[key] !== undefined) {
                         if (values[key]) {
-                            newLines.push(`${key} = ${values[key]}` + (comment ? ` #${comment}` : ''));
+                            newLines.push(`${key} = ${values[key]}` + (comment ? ` #${comment}` : '')); // Change value of existing assignment line
                         }
                         delete values[key];
                     } else {
@@ -89,5 +73,28 @@ function writeIniFile(fileName: string, sectionName: string, values: {[key: stri
         }
     });
 
+    // This section is only used if this is the last profile in the file.
+    addNewAssignmentLines(newLines, values);
+
     writeFileSync(fileName, newLines.join('\n'));
+}
+
+function addNewAssignmentLines(newLines: string[], values: {[key: string]: ProfileVariable}): void {
+    const spaceLines: string[] = []; // Take off any of the last lines that are just spaces
+    while (true) {
+        const lastLine: string = newLines.pop() as string; // Assertion okay since newLines can't be empty
+        if (/^\s*$/.test(lastLine)) {
+            spaceLines.push(lastLine);
+        } else {
+            newLines.push(lastLine); // Put it back
+            break;
+        }
+    }
+    Object.entries(values).forEach(([key, value]) => {
+        if (value) {
+            newLines.push(`${key} = ${value}`); // Add assignment lines for new variables
+        }
+        delete values[key];
+    });
+    newLines.push(...spaceLines); // Put the 'just spaces' lines back
 }
