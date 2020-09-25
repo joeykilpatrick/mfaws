@@ -6,3 +6,7 @@ node_modules
 
 # Built files
 build
+
+# Generated test files
+coverage
+.nyc_output
